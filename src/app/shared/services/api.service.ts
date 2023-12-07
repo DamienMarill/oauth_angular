@@ -3,15 +3,31 @@ import {Subject} from "rxjs";
 import {BACKEND_URL_API} from "../../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {User} from "../models/user";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  private token?: string;
+  private _token?: string;
   isInit: boolean = false;
   initEvent: Subject<boolean> = new Subject<boolean>();
+
+  get token(): string | undefined {
+    return this._token;
+  }
+  private set token(value: string | undefined) {
+    this._token = value;
+  }
+
+  private _user?: User;
+  get user(): User | undefined {
+    return this._user;
+  }
+  private set user(value: User | undefined) {
+    this._user = value;
+  }
 
   constructor(
     private http: HttpClient,
@@ -32,11 +48,15 @@ export class ApiService {
       let res = await this.requestApi('/auth/callback', 'GET', {code});
       if(res && res.token){
         this.savTokens(res.token);
+        await this.getUser();
         this.router.navigate(['/']);
       }
     }else{
       // Sinon on récupère le token dans le localstorage s'il existe et on le stocke dans la variable token
       this.token = localStorage.getItem('apiToken') ? JSON.parse(localStorage.getItem('apiToken') as string).token : undefined;
+      if(this.token){
+        await this.getUser();
+      }
     }
 
     // On indique que l'initialisation est terminée
@@ -117,5 +137,11 @@ export class ApiService {
   logout(){
     localStorage.removeItem('apiToken');
     this.token = undefined;
+  }
+
+  async getUser() {
+    await this.requestApi('/user').then((data: User) => {
+      this.user = data;
+    });
   }
 }
