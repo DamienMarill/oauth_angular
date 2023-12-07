@@ -18,9 +18,7 @@ window.Pusher = require('pusher-js');
   providedIn: 'root'
 })
 export class WsService {
-
-  isOnline = false;
-
+  
   constructor(
     public apiService: ApiService
   ) {
