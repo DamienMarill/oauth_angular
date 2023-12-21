@@ -29,7 +29,7 @@ export class HomeComponent {
   onFileSelect(event: any) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
-      this.photoForm.get('photo')?.setValue(input.files[0]);
+      this.photoForm.get('photo')?.setValue(input.files);
     } else {
       this.photoForm.get('photo')?.setValue(null);
     }
@@ -39,7 +39,7 @@ export class HomeComponent {
     const fichierInput = this.photoForm.get('photo')?.value;
     if (fichierInput) {
       console.log(this.photoForm)
-      this.uploadFichier(fichierInput);
+      this.uploadFichier(fichierInput[0]); // <- [0] fait référence au premier fichier sélectionné. Boucler cette ligne si plusieurs fichiers sélectionnés.
     }
   }
 
