@@ -3,3 +3,8 @@
 <button (click)="sendEvent()">
   send Event
 </button>
+
+<form [formGroup]="photoForm" (ngSubmit)="envoyerPhoto()">
+  <input type="file" (change)="onFileSelect($event)">
+  <button type="submit">Envoyer</button>
+</form>

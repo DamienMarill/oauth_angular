@@ -18,7 +18,7 @@ window.Pusher = require('pusher-js');
   providedIn: 'root'
 })
 export class WsService {
-  
+
   constructor(
     public apiService: ApiService
   ) {
