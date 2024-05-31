@@ -22,6 +22,7 @@ export class WsService {
   constructor(
     public apiService: ApiService
   ) {
+    console.log('WsService');
     let ws = this.initWs();
     let channel = this.linkChannel(ws);
     this.bindEvents(channel);
